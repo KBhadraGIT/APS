@@ -9,6 +9,7 @@ FILE_NAME = "sensor.csv"
 TRAIN_FILE_NAME = "train.csv"
 TEST_FILE_NAME = "test.csv"
 TEST_SIZE = 0.2
+RANDOM_STATE = 42
 
 
 class TrainingPipelineConfig:
@@ -51,6 +52,7 @@ class DataIngestionConfig:
             
             #Population count of test dataset
             self.test_size = TEST_SIZE
+            self.random_state = RANDOM_STATE
 
         except Exception  as e:
             raise APSException(e,sys)     
