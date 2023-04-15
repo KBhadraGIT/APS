@@ -1,0 +1,49 @@
+#Importing libraries and dependencies
+import os, sys
+from src.exception import APSException
+from src.logger import logging
+from datetime import datetime
+
+#Declaring variables
+FILE_NAME = "sensor.csv"
+
+
+class TrainingPipelineConfig:
+    """
+    Description:
+    Here, we are setting up the self.artifact_dir variable to a path string 
+    that includes the current working directory, a folder named "artifact",
+    and a timestamp formatted as year-month-day and hour-minute-second.
+
+    Return:
+    It will create a new directory for storing artifacts corresponding to the
+    components of the pipeline, with the directory name indicating when the 
+    artifacts were generated.
+    """
+    def __init__(self):
+        try:
+            self.artifact_dir = os.path.join(os.getcwd(), "artifact", f"{datetime.now().strftime('%Y%m%d__||__%H%M%S')}")
+        except Exception as e:
+            logging.error(APSException(e,sys))
+            raise APSException(e,sys)
+
+
+class DataIngestionConfig:
+
+    def __init__(self,training_pipeline_config:TrainingPipelineConfig):
+        try:
+            self.database_name="aps"
+            self.collection_name="sensor"
+            self.data_ingestion_dir = os.path.join(training_pipeline_config.artifact_dir , "data_ingestion")
+            self.feature_store_file_path = os.path.join(self.data_ingestion_dir,"feature_store",FILE_NAME)
+            self.train_file_path = os.path.join(self.data_ingestion_dir,"dataset",TRAIN_FILE_NAME)
+            self.test_file_path = os.path.join(self.data_ingestion_dir,"dataset",TEST_FILE_NAME)
+            self.test_size = 0.2
+        except Exception  as e:
+            raise SensorException(e,sys)     
+
+    def to_dict(self,)->dict:
+        try:
+            return self.__dict__
+        except Exception  as e:
+            raise SensorException(e,sys) 
