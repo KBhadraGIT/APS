@@ -7,8 +7,7 @@ from sklearn.model_selection import train_test_split
 #Importing required files within project
 from src.logger import logging
 from src.exception import APSException
-from src.entity import config_entity
-from src.entity import artifact_entity
+from src.entity import config_entity, artifact_entity
 from src.utils import get_collection_as_dataframe
 
 
