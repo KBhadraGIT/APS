@@ -10,6 +10,7 @@ TRAIN_FILE_NAME = "train.csv"
 TEST_FILE_NAME = "test.csv"
 TEST_SIZE = 0.2
 RANDOM_STATE = 42
+MISSING_THRESHOLD = 0.2
 
 
 class TrainingPipelineConfig:
@@ -58,18 +59,18 @@ class DataIngestionConfig:
         except Exception  as e:
             raise APSException(e,sys)     
 
-    def to_dict(self,)->dict:
-        try:
-            return self.__dict__
-        except Exception  as e:
-            raise APSException(e,sys)
         
 
 class DataValidationConfig:
 
     def __init__(self,
                  training_pipeline_config:TrainingPipelineConfig,):
+        
+        #Using the TrainingPipelineConfig creating directory:  artifact/__timestamp__/data_validation
         self.data_validation_dir = os.path.join(training_pipeline_config.artifact_dir , "data_validation")
+
+        #In data_validation directory report.yaml file is created that will contain the report generated during data validation
         self.report_file_path=os.path.join(self.data_validation_dir, "report.yaml")
-        self.missing_threshold:float = 0.2
-        self.base_file_path = os.path.join("aps_failure_training_set1.csv")
+
+        #Threshold limit for data validation stage
+        self.missing_threshold:float = MISSING_THRESHOLD
