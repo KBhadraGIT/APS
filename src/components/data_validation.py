@@ -110,8 +110,57 @@ class DataValidaton:
             return True
 
         except Exception as e:
-            raise APSException(e, sys)
             logging.error(APSException(e, sys))
+            raise APSException(e, sys)
+
+
+    def data_drift(self,
+                   base_df: pd.DataFrame,
+                   current_df: pd.DataFrame,
+                   report_key_name: str):
+        """
+        DESCRIPTION:
+        this function seems to be performing a hypothesis test to 
+        determine if there is significant data drift between the 
+        two datasets and updating a report with the results of this analysis.
+        ==============================================================================
+        PARAMETERS:
+        base_df: Pandas DataFrame representing the base dataset
+        current_df: Pandas DataFrame representing the current dataset
+        report_key_name: Name of the report to be generated
+        ==============================================================================
+        RETURN: 
+        This function will return the report with the results of this analysis.
+        """
+        try:
+            drift_report = dict()
+            base_columns = base_df.columns
+            current_columns = current_df.columns
+
+            for base_column in base_columns:
+                base_data, current_data = base_df[base_column], current_df[base_column]
+                logging.info(f"Hypothesis -> {base_column} [ {base_data.dtype} || {current_data.dtype} ]")
+                logging.info("Our null hypthesis is the specific column will be having same distribution for both the dataset.")
+                same_distribution = ks_2samp(base_data, current_data)
+
+                if same_distribution.pvalue > 0.05:
+                    logging.info("Accepting null hypothesis.")
+                    drift_report[base_column] = {
+                        "pvalues": float(same_distribution.pvalue),
+                        "Same_distribution": True
+                    }
+                else:
+                    logging.info("Rejecting null hypothesis.")
+                    drift_report[base_column] = {
+                        "pvalues": float(same_distribution.pvalue),
+                        "Same_distribution": True
+                    }
+
+                self.validation_error[report_key_name] = drift_report
+
+        except Exception as e:
+            logging.error(APSException(e, sys))
+            raise APSException(e,sys)
 
 
     def initiate_data_validation(self) -> artifact_entity.DataValidationArtifact:
@@ -162,7 +211,11 @@ class DataValidaton:
                                                                      current_df=test_df,
                                                                      report_key_name="missing_columns_within_test_dataset")
             
+            #Writing the report of the hypothesis testing
+            logging.info("Writing report in yaml file.")
+            
+
 
         except Exception as e:
             logging.error(APSException(e, sys))
-
+            raise APSException(e, sys)  
