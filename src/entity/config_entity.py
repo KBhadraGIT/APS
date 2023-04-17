@@ -1,8 +1,10 @@
 #Importing libraries and dependencies
 import os, sys
+from datetime import datetime
+#=============================================================
 from src.exception import APSException
 from src.logger import logging
-from datetime import datetime
+
 
 #Declaring variables
 FILE_NAME = "sensor.csv"
@@ -70,7 +72,10 @@ class DataValidationConfig:
         self.data_validation_dir = os.path.join(training_pipeline_config.artifact_dir , "data_validation")
 
         #In data_validation directory report.yaml file is created that will contain the report generated during data validation
-        self.report_file_path=os.path.join(self.data_validation_dir, "report.yaml")
+        self.report_file_path = os.path.join(self.data_validation_dir, "report.yaml")
 
         #Threshold limit for data validation stage
         self.missing_threshold:float = MISSING_THRESHOLD
+
+        #Stored file for validation in .csv format
+        self.base_file_path = self.base_file_path = os.path.join("aps_failure_training_set1.csv")
