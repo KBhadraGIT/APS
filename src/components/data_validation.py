@@ -22,7 +22,7 @@ class DataValidaton:
             logging.info(f"{'>>'*20} Data Validation {'<<'*20}")
             self.data_validation_config = data_validation_config
             self.data_ingestion_artifact = data_ingestion_artifact
-            self.validation_error = dict()
+            self.validation_report = dict()
 
         except Exception as e:
             logging.error(APSException(e, sys))
@@ -54,7 +54,7 @@ class DataValidaton:
             drop_column_names = null_report[ null_report > threshold ].index
             list_drop_column_names = list(drop_column_names)
             logging.info(f"Columns containg missing values more than threshold limit: {list_drop_column_names}")
-            self.validation_error[report_key_name] = list_drop_column_names
+            self.validation_report[report_key_name] = list_drop_column_names
 
             logging.info(f"Dropping the above columns from the dataframe")
             df.drop(list_drop_column_names,
@@ -104,7 +104,7 @@ class DataValidaton:
                     missing_columns.append(base_column)
             
             if len(missing_columns)>0:
-                self.validation_error[report_key_name] = missing_columns
+                self.validation_report[report_key_name] = missing_columns
                 return False
             
             return True
@@ -156,7 +156,7 @@ class DataValidaton:
                         "Same_distribution": True
                     }
 
-                self.validation_error[report_key_name] = drift_report
+                self.validation_report[report_key_name] = drift_report
 
         except Exception as e:
             logging.error(APSException(e, sys))
@@ -213,8 +213,13 @@ class DataValidaton:
             
             #Writing the report of the hypothesis testing
             logging.info("Writing report in yaml file.")
+            utils.write_yaml_file(file_path = self.data_validation_config.report_file_path,
+                                  data = self.validation_report)
             
-
+            data_validation_artifact = artifact_entity.DataValidationArtifact(report_file_path=self.data_validation_config.report_file_path,)
+            logging.info(f"Data validation artifact: {data_validation_artifact}")
+            
+            return data_validation_artifact
 
         except Exception as e:
             logging.error(APSException(e, sys))
