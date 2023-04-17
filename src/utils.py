@@ -8,6 +8,7 @@ from src.logger import logging
 from src.exception import APSException
 from src.config import mongo_client
 
+
 def get_collection_as_dataframe(database_name: str, collection_name: str) -> pd.DataFrame:
     """
     DESCRIPTION:
@@ -31,4 +32,28 @@ def get_collection_as_dataframe(database_name: str, collection_name: str) -> pd.
         return df
     
     except Exception as e:
+        logging.error(APSException(e, sys))
         raise APSException(e, sys)
+    
+
+def convert_columns_float(df:pd.DataFrame,exclude_columns:list)->pd.DataFrame:
+    """
+    DESCRIPTION:
+    This code converts all columns in a Pandas DataFrame df to the float data 
+    type, except for those listed in exclude_columns.
+    ==========================================================================
+    PARAMETERS:
+    df: pandas.DataFrame
+    exclude_columns: Columns needed to be excluded
+    ==========================================================================
+    RETURN: Pandas DataFrame with columns of float data type.
+    """
+    try:
+        for column in df.columns:
+            if column not in exclude_columns:
+                df[column]=df[column].astype('float')
+        return df
+    
+    except Exception as e:
+        logging.error(APSException(e, sys))
+        raise APSException(e, sys) 
