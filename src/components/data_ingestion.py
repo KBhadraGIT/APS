@@ -3,8 +3,7 @@ import pandas as pd
 import numpy as np
 import sys, os
 from sklearn.model_selection import train_test_split
-
-#Importing required files within project
+#=============================================================
 from src.logger import logging
 from src.exception import APSException
 from src.entity import config_entity, artifact_entity

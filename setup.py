@@ -28,5 +28,5 @@ setup(
     author_email=AUTHOR_EMAIL,
     packages = find_packages(),
     install_requires=get_requirements(),
-    whr = "\src"
+    whr = "\src",
 )
