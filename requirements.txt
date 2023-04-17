@@ -1,6 +1,6 @@
 pandas
 numpy
 pymongo
-sklearn
 scikit-learn
+PyYAML
 -e .
