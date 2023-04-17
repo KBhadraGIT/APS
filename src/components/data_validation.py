@@ -28,7 +28,38 @@ class DataValidaton:
             logging.error(APSException(e, sys))
 
 
-    
+    def drop_missing_values_column(self,
+                                   df: pd.DataFrame,
+                                   report_key_name: str) -> Optional[pd.DataFrame]:
+        try:
+            logging.info("Calculating the percentage of missing values for each column in the DataFrame df.")
+            null_report = df.isna().sum/df.shape[0]
+
+            threshold = self.data_validation_config.missing_threshold
+            logging.info(f"Threshold limit for missing values for every column: {threshold}")
+
+            logging.info(f"Selecting column name containing null values more than the threshold limit.")
+            drop_column_names = null_report[ null_report > threshold ].index
+            list_drop_column_names = list(drop_column_names)
+            logging.info(f"Columns containg missing values more than threshold limit: {list_drop_column_names}")
+            self.validation_error[report_key_name] = list_drop_column_names
+
+            logging.info(f"Dropping the above columns from the dataframe")
+            df.drop(list_drop_column_names,
+                    axis=1,
+                    inplace= True)
+            #Condition if all the columns are removed 
+            if len(df.columns) == 0:
+                logging.info(f"Returned dataframe is empty.")
+                return None
+            return df
+        
+        except Exception as e:
+            logging.error(APSException(e,sys))
+            raise APSException(e,sys)
+        
+        
+
     def initiate_data_validation(self) -> artifact_entity.DataValidationArtifact:
         try:
             logging.info("Loading dataframe.")
