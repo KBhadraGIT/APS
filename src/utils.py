@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import sys,os
 import yaml
+import dill
 #=========================================================================================
 from src.logger import logging
 from src.exception import APSException
@@ -59,7 +60,7 @@ def convert_columns_float(df: pd.DataFrame, exclude_columns: list) -> pd.DataFra
         raise APSException(e, sys)
     
 
-def write_yaml_file(file_path, data: dict):
+def write_yaml_file(file_path, data: dict) -> None:
     """
     DESCRIPTION:
     This function will write the report of the analysis to a YAML file
@@ -82,7 +83,7 @@ def write_yaml_file(file_path, data: dict):
         raise APSException(e, sys)
     
 
-def save_numpy_array_data(file_path: str, array: np.array):
+def save_numpy_array_data(file_path: str, array: np.array) -> None:
     """
     DESCRIPTION
     This function will write the data in NumPy.array form and 
@@ -93,14 +94,35 @@ def save_numpy_array_data(file_path: str, array: np.array):
     file_path: Directory to save the file
     array: Format of dataset
     =============================================================
-    RETURN
-    Saves the file in NumPy array format in designated directory.
+    RETURN: None
     """
     try:
         dir_path = os.path.dirname(file_path)
         os.makedirs(dir_path, exist_ok=True)
         with open(file_path, "wb") as file_obj:
             np.save(file_obj, array)
+
+    except Exception as e:
+        logging.error(APSException(e, sys))
+        raise APSException(e, sys)
+    
+
+def save_object(file_path: str, obj: object) -> None:
+    """
+    DESCRIPTION:
+    This function takes in a file path and an object as input, 
+    and saves the object to the file specified by the file path.
+    =============================================================
+    PARAMETERS
+    file_path: Directory to save the file
+    array: Format of dataset
+    =============================================================
+    RETURN: None
+    """
+    try:
+        os.makedirs(os.path.dirname(file_path), exist_ok= True)
+        with open(file_path, "wb") as file_obj:
+            dill.dump(obj, file_obj)
 
     except Exception as e:
         logging.error(APSException(e, sys))
