@@ -3,4 +3,7 @@ numpy
 pymongo
 scikit-learn
 PyYAML
+typing
+imblearn
+dill
 -e .
