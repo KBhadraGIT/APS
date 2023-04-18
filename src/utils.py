@@ -1,5 +1,6 @@
 #Importing required dependencies
 import pandas as pd
+import numpy as np
 import sys,os
 import yaml
 #=========================================================================================
@@ -35,7 +36,7 @@ def get_collection_as_dataframe(database_name: str, collection_name: str) -> pd.
         raise APSException(e, sys)
     
 
-def convert_columns_float(df:pd.DataFrame,exclude_columns:list)->pd.DataFrame:
+def convert_columns_float(df: pd.DataFrame, exclude_columns: list) -> pd.DataFrame:
     """
     DESCRIPTION:
     This code converts all columns in a Pandas DataFrame df to the float data 
@@ -58,7 +59,7 @@ def convert_columns_float(df:pd.DataFrame,exclude_columns:list)->pd.DataFrame:
         raise APSException(e, sys)
     
 
-def write_yaml_file(file_path,data:dict):
+def write_yaml_file(file_path, data: dict):
     """
     DESCRIPTION:
     This function will write the report of the analysis to a YAML file
@@ -76,6 +77,31 @@ def write_yaml_file(file_path,data:dict):
         with open(file_path,"w") as file_writer:
             yaml.dump(data,file_writer)
     
+    except Exception as e:
+        logging.error(APSException(e, sys))
+        raise APSException(e, sys)
+    
+
+def save_numpy_array_data(file_path: str, array: np.array):
+    """
+    DESCRIPTION
+    This function will write the data in NumPy.array form and 
+    save it as an object file in the directory by creating a 
+    directory path if it doesn't exist.
+    =============================================================
+    PARAMETERS
+    file_path: Directory to save the file
+    array: Format of dataset
+    =============================================================
+    RETURN
+    Saves the file in NumPy array format in designated directory.
+    """
+    try:
+        dir_path = os.path.dirname(file_path)
+        os.makedirs(dir_path, exist_ok=True)
+        with open(file_path, "wb") as file_obj:
+            np.save(file_obj, array)
+
     except Exception as e:
         logging.error(APSException(e, sys))
         raise APSException(e, sys)
