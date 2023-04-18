@@ -13,6 +13,9 @@ TEST_FILE_NAME = "test.csv"
 TEST_SIZE = 0.2
 RANDOM_STATE = 42
 MISSING_THRESHOLD = 0.2
+TRANSFORMER_OBJECT_FILE_NAME = "transformer.pkl"
+TARGET_ENCODER_OBJECT_FILE_NAME = "target_encoder.pkl"
+MODEL_FILE_NAME = "model.pkl"
 
 
 class TrainingPipelineConfig:
@@ -60,7 +63,6 @@ class DataIngestionConfig:
 
         except Exception  as e:
             raise APSException(e,sys)     
-
         
 
 class DataValidationConfig:
@@ -79,3 +81,23 @@ class DataValidationConfig:
 
         #Stored file for validation in .csv format
         self.base_file_path = self.base_file_path = os.path.join("aps_failure_training_set1.csv")
+
+
+class DataTransformationConfig:
+
+    def __init__(self,
+                 training_pipeline_config:TrainingPipelineConfig,):
+        #Using the TrainingPipelineConfig creating directory:  artifact/__timestamp__/data_transformation
+        self.data_transformation_dir = os.path.join(training_pipeline_config.artifact_dir , "data_transformation")
+        
+        #In data transformation directiory a folder is created transformer, inside that transformer.pkl is created to store the transformer object.
+        self.transform_object_path = os.path.join(self.data_transformation_dir,"transformer",TRANSFORMER_OBJECT_FILE_NAME)
+
+        #In data transformation directiory a folder is created transformed, inside that train dataset is stored in .npz format after transformation.
+        self.transformed_train_path =  os.path.join(self.data_transformation_dir,"transformed",TRAIN_FILE_NAME.replace("csv","npz"))
+
+        #In data transformation directiory a folder is created transformed, inside that test dataset is stored in .npz format  after transformation.
+        self.transformed_test_path =os.path.join(self.data_transformation_dir,"transformed",TEST_FILE_NAME.replace("csv","npz"))
+
+        #In data transformation directiory a folder is created target_encoder, inside that target_encoder is stored in .pkl format  after transformation.
+        self.target_encoder_path = os.path.join(self.data_transformation_dir,"target_encoder",TARGET_ENCODER_OBJECT_FILE_NAME)
