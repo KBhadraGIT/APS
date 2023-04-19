@@ -127,3 +127,22 @@ def save_object(file_path: str, obj: object) -> None:
     except Exception as e:
         logging.error(APSException(e, sys))
         raise APSException(e, sys)
+    
+
+def load_numpy_array_data(file_path: str) -> np.array:
+    """
+    DESCRIPTION:
+    This function will load numpy array data from the file 
+    path and return a NumPy.array
+    =======================================================
+    PARAMETERS:
+    file_path: location of file to be loaded in str format
+    =======================================================
+    RETURN: NumPy.array
+    """
+    try:
+        with open(file_path, "rb") as file_obj:
+            return np.load(file_obj)
+    except Exception as e:
+        logging.error(APSException(e, sys))
+        raise APSException(e, sys)    
