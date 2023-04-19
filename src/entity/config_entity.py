@@ -16,6 +16,8 @@ MISSING_THRESHOLD = 0.2
 TRANSFORMER_OBJECT_FILE_NAME = "transformer.pkl"
 TARGET_ENCODER_OBJECT_FILE_NAME = "target_encoder.pkl"
 MODEL_FILE_NAME = "model.pkl"
+OVERFITTING_THRESHOLD = 0.1
+EXPECTED_SCORE = 0.7
 
 
 class TrainingPipelineConfig:
@@ -112,3 +114,7 @@ class ModelTrainerConfig:
 
         #Inside the above directory a folder is created "model" that will contain the trained model by name model.pkl
         self.model_path = os.path.join(self.model_trainer_dir, "model", MODEL_FILE_NAME)
+
+        #Threshold value to check for overfitting and underfitting of the model
+        self.overiftting_threshold = OVERFITTING_THRESHOLD
+        self.expected_score = EXPECTED_SCORE
