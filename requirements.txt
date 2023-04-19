@@ -6,4 +6,5 @@ PyYAML
 typing
 imblearn
 dill
+xgboost
 -e .
