@@ -101,3 +101,14 @@ class DataTransformationConfig:
 
         #In data transformation directiory a folder is created target_encoder, inside that target_encoder is stored in .pkl format  after transformation.
         self.target_encoder_path = os.path.join(self.data_transformation_dir,"target_encoder",TARGET_ENCODER_OBJECT_FILE_NAME)
+
+
+class ModelTrainerConfig:
+
+    def __init__(self,
+                 training_pipeline_config: TrainingPipelineConfig,):
+        #Using the TrainingPipelineConfig creating directory:  artifact/__timestamp__/model_trainer
+        self.model_trainer_dir = os.path.join(training_pipeline_config.artifact_dir, "model_trainer")
+
+        #Inside the above directory a folder is created "model" that will contain the trained model by name model.pkl
+        self.model_path = os.path.join(self.model_trainer_dir, "model", MODEL_FILE_NAME)
