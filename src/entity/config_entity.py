@@ -18,6 +18,7 @@ TARGET_ENCODER_OBJECT_FILE_NAME = "target_encoder.pkl"
 MODEL_FILE_NAME = "model.pkl"
 OVERFITTING_THRESHOLD = 0.1
 EXPECTED_SCORE = 0.7
+CHANGE_THRESHOLD = 0.1
 
 
 class TrainingPipelineConfig:
@@ -118,3 +119,11 @@ class ModelTrainerConfig:
         #Threshold value to check for overfitting and underfitting of the model
         self.overiftting_threshold = OVERFITTING_THRESHOLD
         self.expected_score = EXPECTED_SCORE
+
+
+class ModelEvaluationConfig:
+
+    def __init__(self, 
+                 training_pipeline_config: TrainingPipelineConfig,):
+        #Setting up threshold value for model evaluation
+        self.change_threshold = CHANGE_THRESHOLD
