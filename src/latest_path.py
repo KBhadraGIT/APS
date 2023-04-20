@@ -7,7 +7,7 @@ from src.logger import logging
 from src.exception import APSException
 from src.entity.config_entity import TRANSFORMER_OBJECT_FILE_NAME, MODEL_FILE_NAME, TARGET_ENCODER_OBJECT_FILE_NAME
 
-class latest_path_finder:
+class LatestPathFinder:
 
     def __init__(self,
                  model_registry = "saved_models",
