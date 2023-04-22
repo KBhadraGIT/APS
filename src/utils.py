@@ -150,11 +150,45 @@ def load_numpy_array_data(file_path: str) -> np.array:
     
 
 def save_object(file_path: str, obj: object):
+    """
+    DESCRIPTION:
+    This function will intake the directory as string value 
+    and store the object in the given directory.
+    =======================================================
+    PARAMETERS:
+    file_path: location of file to be loaded in str format
+    obj: object name to be saved
+    =======================================================
+    RETURN: None
+    """
     try:
         os.makedirs(os.path.dirname(file_path), exist_ok= True)
         with open(file_path, "wb") as file_obj:
             dill.dump(obj, file_obj)
         logging.info("Object saved")
+        
+    except Exception as e:
+        logging.error(APSException(e, sys))
+        raise APSException(e, sys)
+    
+
+def load_object(file_path: str, ) -> object:
+    """
+    DESCRIPTION:
+    This function will take the directory as a string value
+    and return the object
+    =======================================================
+    PARAMETERS:
+    file_path: location/directory of file to be loaded in
+               str format
+    =======================================================
+    RETURN: object
+    """
+    try:
+        if not os.path.exists(file_path):
+            raise Exception(f"The file: {file_path} is not exists")
+        with open(file_path, "rb") as file_obj:
+            return dill.load(file_obj)
         
     except Exception as e:
         logging.error(APSException(e, sys))
